@@ -10,7 +10,7 @@ class BaseModel:
     attributes/methods for other classes
     """
 
-    def __init__(self, **kwargs):
+    def __init__(self, *args, **kwargs):
         """Initialize a new BaseModel."""
 
         self.id = str(uuid.uuid4())
