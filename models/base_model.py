@@ -3,6 +3,7 @@
 """
 import uuid
 from datetime import datetime
+import models
 
 
 class BaseModel:
@@ -23,6 +24,8 @@ class BaseModel:
                     self.__dict__[key] = datetime.strptime(value, "%Y-%m-%dT%H:%M:%S.%f")
                 else:
                     self.__dict__[key] = value
+        else:
+            models.storage.new(self)
 
 
     def __str__(self):
@@ -33,6 +36,8 @@ class BaseModel:
         """updates the public instance attribute updated_at 
         with the current datetime"""
         self.updated_at = datetime.now()
+        models.storage.save()
+
     
     def to_dict(self):
         """returns a dictionary containing all keys/values 
