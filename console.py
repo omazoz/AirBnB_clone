@@ -6,7 +6,6 @@ import cmd
 import models
 
 
-
 class HBNBCommand(cmd.Cmd):
     """Class command interpreter"""
     prompt = "(hbnb) "
@@ -19,6 +18,7 @@ class HBNBCommand(cmd.Cmd):
         "Amenity",
         "Review"
         ]
+
     def do_quit(self, line):
         """Quit to exit"""
         return True
@@ -40,9 +40,9 @@ class HBNBCommand(cmd.Cmd):
         else:
             obj = eval(line)
             obj.save(self)
-            #print(obj.id)
-            #models.storage.save()
-    
+            # print(obj.id)
+            # models.storage.save()
+
     def do_show(self, line):
         """Prints the string representation of an instance"""
         x = line.split()
@@ -58,7 +58,7 @@ class HBNBCommand(cmd.Cmd):
             print("** no instance found **")
         else:
             print(list_obj["{}.{}".format(x[0], x[1])])
-    
+
     def do_destroy(self, line):
         """Delete a class instance of a given id."""
         list_obj = models.storage.all()
@@ -75,10 +75,6 @@ class HBNBCommand(cmd.Cmd):
         else:
             del list_obj["{}.{}".format(x[0], x[1])]
             models.storage.save()
-        
-
-
-
 
 
 if __name__ == '__main__':

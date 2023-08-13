@@ -20,29 +20,28 @@ class FileStorage:
     def all(self):
         """Return __objects"""
         return self.__objects
-    
-    def new(self,obj):
+
+    def new(self, obj):
         """sets in __objects the obj with key <obj class name>.id"""
-        self.__objects["{}.{}".format(obj.__class__.__name__, obj.id)] = obj    
-    
-    def newreload(self,obj):
+        self.__objects["{}.{}".format(obj.__class__.__name__, obj.id)] = obj
+
+    def newreload(self, obj):
         """sets in __objects the obj with key <obj class name>.id"""
         for o in obj.values():
-                    class_name = o["__class__"]
-                    del o["__class__"]
-                    #print(o["id"])
-                    self.__objects["{}.{}".format(class_name, o["id"])] = o
-        print(self.__objects)   
+            class_name = o["__class__"]
+            del o["__class__"]
+            self.__objects["{}.{}".format(class_name, o["id"])] = o
+        print(self.__objects)
 
     def save(self):
         """serializes __objects to the JSON file (path: __file_path)"""
         d = {}
         o = BaseModel()
         for k in self.__objects.keys():
-             d[k] = self.__objects[k].to_dict()
+            d[k] = self.__objects[k].to_dict()
         with open(self.__file_path, "w") as f:
             json.dump(d, f)
-    
+
     def reload(self):
         """deserializes the JSON file to __objects"""
         if os.path.isfile(self.__file_path):
@@ -50,4 +49,4 @@ class FileStorage:
                 object_dict = json.load(f)
                 self.newreload(object_dict)
         else:
-             print("File Not exist")
+            print("File Not exist")
