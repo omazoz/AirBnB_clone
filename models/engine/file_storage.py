@@ -31,14 +31,13 @@ class FileStorage:
             class_name = o["__class__"]
             del o["__class__"]
             self.__objects["{}.{}".format(class_name, o["id"])] = o
-        print(self.__objects)
+        # print(self.__objects)
 
     def save(self):
         """serializes __objects to the JSON file (path: __file_path)"""
         d = {}
-        o = BaseModel()
-        for k in self.__objects.keys():
-            d[k] = self.__objects[k].to_dict()
+        for k, v in self.__objects.items():
+            d[k] = v.to_dict()
         with open(self.__file_path, "w") as f:
             json.dump(d, f)
 

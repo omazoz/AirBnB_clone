@@ -38,10 +38,8 @@ class HBNBCommand(cmd.Cmd):
         elif line not in HBNBCommand.__list_classes:
             print("** class doesn't exist **")
         else:
-            obj = eval(line)
-            obj.save(self)
-            # print(obj.id)
-            # models.storage.save()
+            print(eval(line)().id)
+            models.storage.save()
 
     def do_show(self, line):
         """Prints the string representation of an instance"""
@@ -75,6 +73,64 @@ class HBNBCommand(cmd.Cmd):
         else:
             del list_obj["{}.{}".format(x[0], x[1])]
             models.storage.save()
+
+    def do_all(self, line):
+        """Prints all string representation of all instances"""
+
+        if len(line) > 0:
+            if line not in HBNBCommand.__list_classes:
+                print("** class doesn't exist **")
+            else:
+                objl = []
+                for obj in models.storage.all().values():
+                    objl.append(obj.__str__())
+
+                print(objl)
+        else:
+            objl = []
+            for obj in models.storage.all().values():
+                if len(line) > 0 and line == obj.__class__.__name__:
+                    objl.append(obj.__str__())
+                elif len(line) == 0:
+                    objl.append(obj.__str__())
+            print(objl)
+
+    def do_update(self, line):
+        """Updates an instance based on the class name and
+        id by adding or updating attribute"""
+        objdict = models.storage.all()
+        x = line.split()
+        if len(line) == 0:
+            print("** class name missing **")
+            return False
+        if x[0] not in HBNBCommand.__list_classes:
+            print("** class doesn't exist **")
+            return False
+        if len(x) == 1:
+            print("** instance id missing **")
+            return False
+        if "{}.{}".format(x[0], x[1]) not in objdict.keys():
+            print("** no instance found **")
+            return False
+        if len(x) == 2:
+            print("** attribute name missing **")
+            return False
+        if len(x) == 3:
+            try:
+                type(eval(x[2])) != dict
+            except NameError:
+                print("** value missing **")
+                return False
+
+        if len(x) >= 4:
+            obj = objdict["{}.{}".format(x[0], x[1])]
+            print(obj.__class__.__dict__.keys())
+            if x[2] in obj.__class__.__dict__.keys():
+                valtype = type(obj.__class__.__dict__[x[2]])
+                obj.__dict__[x[2]] = valtype(x[3])
+            else:
+                obj[x[2]] = x[3]
+        models.storage.save()
 
 
 if __name__ == '__main__':
