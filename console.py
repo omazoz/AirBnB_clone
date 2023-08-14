@@ -142,19 +142,21 @@ class HBNBCommand(cmd.Cmd):
             else:
                 obj[x[2]] = x[3]
         models.storage.save()
-    
+
     def default(self, line):
         """ default task 11
         """
-        functions = {"all": self.do_all,
-                    "show": self.do_show,
-                    "destroy": self.do_destroy,
-                    "update": self.do_update}
+        functions = {
+            "all": self.do_all,
+            "show": self.do_show,
+            "destroy": self.do_destroy,
+            "update": self.do_update}
 
         args_line = re.match(r"^(\w+)\.(\w+)\((.*)\)", line)
         if args_line:
             args_line = args_line.groups()
-        if not args_line or len(args_line) < 2 or args_line[0] not in HBNBCommand.__list_classes \
+        if not args_line or len(args_line) < 2 \
+            or args_line[0] not in HBNBCommand.__list_classes \
                 or args_line[1] not in functions.keys():
             super().default(line)
         if args_line[1] in ["all", "count"]:
@@ -166,12 +168,15 @@ class HBNBCommand(cmd.Cmd):
             if params.groups()[1][0] == '{':
                 dic_p = eval(params.groups()[1])
                 for k, v in dic_p.items():
-                    functions[args_line[1]](args_line[0] + " " + params.groups()[0] +
-                                      " " + k + " " + str(v))
+                    functions[args_line[1]](args_line[0] + " " +
+                                            params.groups()[0] +
+                                            " " + k + " " + str(v))
             else:
                 rest = params.groups()[1].split(", ")
-                functions[args_line[1]](args_line[0] + " " + params.groups()[0] + " " +
-                                  rest[0] + " " + rest[1])
+                functions[args_line[1]](args_line[0] +
+                                        " " + params.groups()[0] + " " +
+                                        rest[0] + " " + rest[1])
+
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
