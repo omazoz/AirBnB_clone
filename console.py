@@ -90,10 +90,10 @@ class HBNBCommand(cmd.Cmd):
             else:
                 listobj = models.storage.all()
                 objl = []
-                for obj in models.storage.all():
+                for obj in listobj:
                     x = obj.__str__()
                     x = x.split('.')
-                    print(listobj[obj].__str__())
+                    # print(listobj[obj].__str__())
                     if line == x[0]:
                         objl.append(obj.__str__())
                 print(objl)
@@ -135,7 +135,7 @@ class HBNBCommand(cmd.Cmd):
 
         if len(x) >= 4:
             obj = objdict["{}.{}".format(x[0], x[1])]
-            print(obj.__class__.__dict__.keys())
+            # print(obj.__class__.__dict__.keys())
             if x[2] in obj.__class__.__dict__.keys():
                 valtype = type(obj.__class__.__dict__[x[2]])
                 obj.__dict__[x[2]] = valtype(x[3])
@@ -150,7 +150,9 @@ class HBNBCommand(cmd.Cmd):
             "all": self.do_all,
             "show": self.do_show,
             "destroy": self.do_destroy,
-            "update": self.do_update}
+            "update": self.do_update,
+            "count": self.my_count
+            }
 
         args_line = re.match(r"^(\w+)\.(\w+)\((.*)\)", line)
         if args_line:
@@ -176,6 +178,18 @@ class HBNBCommand(cmd.Cmd):
                 functions[args_line[1]](args_line[0] +
                                         " " + params.groups()[0] + " " +
                                         rest[0] + " " + rest[1])
+    
+    def my_count(self, line):
+        """retrieve the number of instances of a class
+        """
+        list_obj = models.storage.all()
+        count = 0
+        for obj in list_obj:
+            x = obj.__str__()
+            x = x.split('.')
+            if x[0] == line:
+                count += 1
+        print(count)
 
 
 if __name__ == '__main__':
