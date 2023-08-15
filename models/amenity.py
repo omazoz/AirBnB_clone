@@ -1,9 +1,8 @@
 #!/usr/bin/python3
-"""Module for class Amenity
-"""
+""" Import models"""
 from models.base_model import BaseModel
 
 
 class Amenity(BaseModel):
-    """ Class for Amenity"""
+    """ Amenity Class"""
     name = ""

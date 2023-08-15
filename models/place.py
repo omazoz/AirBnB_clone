@@ -1,11 +1,10 @@
 #!/usr/bin/python3
-"""Module for class Place
-"""
+""" Import models"""
 from models.base_model import BaseModel
 
 
 class Place(BaseModel):
-    """ Class for Place"""
+    """ Place Class"""
     city_id = ""
     user_id = ""
     name = ""

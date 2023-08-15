@@ -1,48 +1,46 @@
 #!/usr/bin/python3
-"""Module for class BaseModel
+""" Import Models
 """
-import uuid
+from uuid import uuid4
 from datetime import datetime
 import models
+from models import storage
 
 
 class BaseModel:
-    """ class BaseModel that defines all common
-    attributes/methods for other classes
-    """
+    """class BaseModel"""
 
-    def __init__(self, *args, **kwargs):
-        """Initialize a new BaseModel."""
-
-        self.id = str(uuid.uuid4())
+    def __init__(self, *args, **kwargs) -> None:
+        """Initialization of BaseModel Class"""
+        self.id = str(uuid4())
         self.created_at = datetime.now()
         self.updated_at = datetime.now()
-        strformat = "%Y-%m-%dT%H:%M:%S.%f"
-        if len(kwargs) != 0:
-            for key, value in kwargs.items():
-                if key == "created_at" or key == "updated_at":
-                    self.__dict__[key] = datetime.strptime(value, strformat)
-                else:
-                    self.__dict__[key] = value
+        if kwargs:
+            for k, v in kwargs.items():
+                if k in ["created_at", "updated_at"]:
+                    self.__dict__[k] = datetime.strptime(
+                        v, "%Y-%m-%dT%H:%M:%S.%f")
+                elif k != "__class__":
+                    self.__dict__[k] = v
         else:
-            models.storage.new(self)
+            storage.new(self)
 
-    def __str__(self):
-        """should print: [<class name>] (<self.id>) <self.__dict__>"""
-        c = self.__class__.__name__
-        return "[{}] ({}) {}".format(c, self.id, self.__dict__)
+    def __str__(self) -> str:
+        """Returns the string representation"""
+        return "[{}] ({}) {}".format(
+            self.__class__.__name__, self.id, self.__dict__)
 
-    def save(self):
-        """updates the public instance attribute updated_at
-        with the current datetime"""
+    def save(self) -> None:
+        """update the public instance"""
         self.updated_at = datetime.now()
-        models.storage.save()
+        storage.save()
 
-    def to_dict(self):
-        """returns a dictionary containing all keys/values
-        of __dict__ of the instance"""
-        copy_dict = self.__dict__.copy()
-        copy_dict["created_at"] = self.created_at.isoformat()
-        copy_dict["updated_at"] = self.updated_at.isoformat()
-        copy_dict["__class__"] = self.__class__.__name__
-        return copy_dict
+    def to_dict(self) -> dict:
+        """returns the dict representation of the instance"""
+        d = dict(self.__dict__)
+        d["__class__"] = self.__class__.__name__
+        if not isinstance(d["created_at"], str):
+            d["created_at"] = d["created_at"].isoformat()
+        if not isinstance(d["updated_at"], str):
+            d["updated_at"] = d["updated_at"].isoformat()
+        return d
