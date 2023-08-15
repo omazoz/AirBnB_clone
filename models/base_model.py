@@ -4,7 +4,6 @@
 from uuid import uuid4
 from datetime import datetime
 import models
-from models import storage
 
 
 class BaseModel:
@@ -23,7 +22,7 @@ class BaseModel:
                 elif k != "__class__":
                     self.__dict__[k] = v
         else:
-            storage.new(self)
+            models.storage.new(self)
 
     def __str__(self) -> str:
         """Returns the string representation"""
@@ -33,7 +32,7 @@ class BaseModel:
     def save(self) -> None:
         """update the public instance"""
         self.updated_at = datetime.now()
-        storage.save()
+        models.storage.save()
 
     def to_dict(self) -> dict:
         """returns the dict representation of the instance"""
