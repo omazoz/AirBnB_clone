@@ -1,0 +1,8 @@
+header{
+  background-color:#FFFFFF;
+  background-image:url("../images/logo.png");
+  background-repeat: no-repeat;
+  height:70px;
+  width:100%;
+  border-bottom:solid 1px #CCCCCC;
+}
